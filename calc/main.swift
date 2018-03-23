@@ -10,5 +10,15 @@ import Foundation
 
 var args = ProcessInfo.processInfo.arguments
 args.removeFirst() // remove the name of the program
+
+let operators = ["+" : Operator(symbol : "+", precedence : 5),
+    "-" : Operator(symbol : "-", precedence : 4),
+    "x" : Operator(symbol : "x", precedence : 3),
+    "%" : Operator(symbol : "%", precedence : 2),
+    "/" : Operator(symbol : "/", precedence : 1)]
+
+
+
 let parser = Parser()
 parser.isValidInfix(args: args)
+
