@@ -21,5 +21,9 @@ let operators = ["+" : Operator(symbol : "+", precedence : 2),
 
 let parser = Parser()
 parser.isValidInfix(args: args)
-print (parser.infixToPostfix(args: args))
+let postfixExpression = parser.infixToPostfix(args: args)
+let tree = ExpressionTree(postfixExpression : postfixExpression)
+tree.pprint(root : tree.root!)
+print (tree.pprint(root: tree.root!))
+
 
