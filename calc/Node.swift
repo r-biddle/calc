@@ -11,10 +11,14 @@ import Foundation
 
 class Node{
     var data : String
-    var left : Node
-    var right : Node
+    var left : Node?
+    var right : Node?
     
-    init(data: String, left: Node, right : Node){
+    init(data: String){
+        self.data = data
+    }
+
+    init(data: String, left : Node, right : Node){
         self.data = data
         self.left = left
         self.right = right
