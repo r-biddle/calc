@@ -23,7 +23,6 @@ let parser = Parser()
 parser.isValidInfix(args: args)
 let postfixExpression = parser.infixToPostfix(args: args)
 let tree = ExpressionTree(postfixExpression : postfixExpression)
-tree.pprint(root : tree.root!)
-print (tree.pprint(root: tree.root!))
+print (tree.evaluateExpression(root: tree.root!))
 
 
