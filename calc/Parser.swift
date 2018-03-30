@@ -7,52 +7,41 @@
 //
 
 import Foundation
-
 struct Parser{
-    
-    var error_message = "Please provide a mathematical expression in infix notation"
-    // Check that the command line arguments provided are a valid infix expression
-    // Use the fact that a complete infix expression must contain an odd number of symbols to be complete
-    // Further, a symbol at an odd numbered position must be a number, any symbol at an even numbered position
-    // must be an operater
-    
-    func isValidInfix(args : [String]){
+    /* Check that string array provided is a valid infix expression
+       Use the fact that an infix expression must contain an odd number of symbols to be complete
+       Further, a symbol at an odd numbered position must be a operand, any symbol at an even numbered position
+       must be an operator
+    */
+    func isValidInfix(args : [String]) throws{
         if (args.count % 2 == 0){
-            print (error_message)
-            exit(1)
+            throw ParseError.IncorrectInfixExpression
         }
-        
-        for arg in args{
-            if (args.index(of: arg)! % 2 == 0) && (Int(arg) == nil){
-                print (error_message)
-                exit(1)
-            }
-            else if (args.index(of: arg)! % 2 != 0) && (operators[arg] == nil){
-                print (error_message)
-                exit(1)
+
+        for i in 0...args.count-1{
+            if (i % 2 == 0) && (!Operand.isValidOperand(symbol: args[i])){
+                    throw ParseError.IncorrectInfixExpression
+            } else if (i % 2 != 0) && (!Operator.isValidOperator(symbol: args[i])){
+                    throw ParseError.IncorrectInfixExpression
             }
         }
     }
     
     // Convert from infix notation to postfix notation using the Shunting-Yard algorithm
-    
-    func infixToPostfix(args : [String]) -> [String]{
+    func infixToPostfix(infixExpression : [String]) -> [String]{
         var output_queue : [String] = []
         var operator_stack : [String] = []
-        for arg in args{
-            // Input already validated. Guarenteed to be a number
-            if (args.index(of: arg)! % 2 == 0){
-                output_queue.append(arg);
+        for i in 0...infixExpression.count-1{
+            if (i % 2 == 0){
+                output_queue.append(infixExpression[i]);
             }
-            //Input already validate Guarenteed to be an operator
-            else if (args.index(of: arg)! % 2 != 0){
+            else if (i % 2 != 0){
                 if (!operator_stack.isEmpty){
-                   // let top_of_operator_stack : String = operator_stack.last!
-                    while (!operator_stack.isEmpty) && (operators[operator_stack.last!]!.precedence <= operators[arg]!.precedence) {
+                    while (!operator_stack.isEmpty) && (operators[operator_stack.last!]!.precedence <= operators[infixExpression[i]]!.precedence) {
                         output_queue.append(operator_stack.popLast()!)
                     }
                 }
-                operator_stack.append(arg)
+                operator_stack.append(infixExpression[i])
             }
         }
         while (!operator_stack.isEmpty){
