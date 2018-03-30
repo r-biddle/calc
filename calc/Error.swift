@@ -14,3 +14,7 @@ enum DivisionError: Error {
 enum ParseError : Error{
     case IncorrectInfixExpression
 }
+
+enum OutOfBounds : Error{
+    case IntegerOverflow
+}
