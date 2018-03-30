@@ -7,22 +7,26 @@
 //
 
 import Foundation
-
 var args = ProcessInfo.processInfo.arguments
 args.removeFirst() // remove the name of the program
-
-let operators = ["+" : Operator(symbol : "+", precedence : 2),
-    "-" : Operator(symbol : "-", precedence : 2),
-    "x" : Operator(symbol : "x", precedence : 1),
-    "%" : Operator(symbol : "%", precedence : 1),
-    "/" : Operator(symbol : "/", precedence : 1)]
-
-
-
 let parser = Parser()
-parser.isValidInfix(args: args)
-let postfixExpression = parser.infixToPostfix(args: args)
+do{
+    try parser.isValidInfix(args: args)
+} catch let error{
+    print ("Error : \(error) - Please provide a valid mathematical expression in Infix notation")
+    exit(1)
+}
+let postfixExpression = parser.infixToPostfix(infixExpression : args)
 let tree = ExpressionTree(postfixExpression : postfixExpression)
-print (tree.evaluateExpression(root: tree.root!))
+print (Int(tree.evaluateExpression(root: tree.root!))!)
+
+
+
+
+
+
+
+
+
 
 

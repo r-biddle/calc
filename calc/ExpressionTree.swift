@@ -7,16 +7,20 @@
 //
 
 import Foundation
-
-
-
+// Container struct for mathematical expression tree.
 struct ExpressionTree{
     var root : Node?
+    static let operators = ["+" : Operator(symbol : "+", precedence : 2),
+                            "-" : Operator(symbol : "-", precedence : 2),
+                            "x" : Operator(symbol : "x", precedence : 1),
+                            "%" : Operator(symbol : "%", precedence : 1),
+                            "/" : Operator(symbol : "/", precedence : 1)]
     
+    // Provide a constructor to allow for construction from a postfix expression
     init(postfixExpression : [String]){
         var outputStack : [Node] = []
         for symbol in postfixExpression{
-            if (Int(symbol) != nil){
+            if Operand.isValidOperand(symbol: symbol){
                 outputStack.append(Node(data : symbol))
             } else {
                 let right : Node = outputStack.popLast()!;
@@ -27,31 +31,23 @@ struct ExpressionTree{
         root = outputStack.popLast()!;
     }
     
-
-    func evaluateExpression(root : Node) -> Int{
-        
-        if (Int(root.data) != nil){
-            return Int(root.data)!
+    // Provide function to evaluate the expression and return the value
+    func evaluateExpression(root : Node) -> String{
+        if Operand.isValidOperand(symbol: root.data){
+            return root.data
         }
+        let left_value : String = evaluateExpression(root : root.left! )
+        let right_value : String =  evaluateExpression(root : root.right!)
+        var result : String = ""
         
-        let left_value : Int = evaluateExpression(root : root.left! )
-        
-        let right_value : Int =  evaluateExpression(root : root.right!)
-        var result : Int = 0
-        if (root.data == "-"){
-            result = left_value - right_value
-        }else if (root.data == "+"){
-            result =  left_value + right_value
-        }else if (root.data == "x"){
-            result =  left_value * right_value
-        } else if (root.data == "/"){
-            result =  left_value / right_value
-        } else if (root.data == "%"){
-            result =  left_value % right_value
+        if Operator.isValidOperator(symbol: root.data){
+            do{
+                try result = ExpressionTree.operators[root.data]!.evaluate(left_operand: left_value, right_operand: right_value)
+            } catch let error{
+                print ("Error : \(error) Cannot divide by Zero")
+                exit(1)
+            }
         }
         return result
     }
-    
-
-    
 }

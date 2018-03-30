@@ -37,7 +37,7 @@ struct Parser{
             }
             else if (i % 2 != 0){
                 if (!operator_stack.isEmpty){
-                    while (!operator_stack.isEmpty) && (operators[operator_stack.last!]!.precedence <= operators[infixExpression[i]]!.precedence) {
+                    while (!operator_stack.isEmpty) && (ExpressionTree.operators[operator_stack.last!]!.precedence <= ExpressionTree.operators[infixExpression[i]]!.precedence) {
                         output_queue.append(operator_stack.popLast()!)
                     }
                 }
